@@ -3,8 +3,9 @@ const bodyParser = require('body-parser')
 const MongoClient = require('mongodb').MongoClient
 const app = express()
 
-
+//===========
 //Connectivity
+//===========
 const connectionString = "mongodb+srv://admin:dGakD2MeWQprWN02@cluster0.stgq9.mongodb.net/tinderdb?retryWrites=true&w=majority";
 MongoClient.connect(connectionString, { useUnifiedTopology: true })
     .then(client => {
@@ -12,17 +13,24 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
         const db = client.db('tinderdb')
         const userCollection = db.collection('users')
 
+    //===========
     //Middlewares
+    //===========
     app.use(bodyParser.urlencoded({extended:true}))
     app.use(bodyParser.json())
     app.use(express.json());
     
 
+    //===========
     //Routes
+    //===========
+
+    //Root
     app.get('/', (req, res) => {
         res.status(200).send("Hello World!!!!!!!!!!!!!!!!!!")
     })
 
+    //Get All Users
     app.get('/tinder/users', (req, res) => {
         db.collection('users')
         .find()
@@ -32,6 +40,7 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
         })
     })
 
+    //Create User
     app.post('/tinder/users', (req, res) => {
         userCollection.insertOne(req.body)
         .then(user => {
@@ -39,6 +48,7 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
         })
     })
 
+    //Delete User by Name
     app.delete('/tinder/users', (req, res) => {
         userCollection.findOneAndDelete({
             name:req.body.name
