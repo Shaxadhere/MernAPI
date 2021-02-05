@@ -50,10 +50,11 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
 
     //Delete User by Name
     app.delete('/tinder/users', (req, res) => {
+        console.log(req.body._id);
         userCollection.findOneAndDelete({
             _id:req.body._id
         }).then(result => {
-            res.status(200).send(result);
+            res.status(201).send(result);
         }).catch(error => console.error(error))
     })
 
