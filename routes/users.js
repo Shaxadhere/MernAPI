@@ -3,6 +3,21 @@ const router = express.Router()
 const MongoClient = require('mongodb').MongoClient
 // const Users = require('../models/users')
 
+const connectionString = "mongodb+srv://admin:dGakD2MeWQprWN02@cluster0.stgq9.mongodb.net/tinderdb?retryWrites=true&w=majority";
+
+MongoClient.connect(connectionString, {useUnifiedTopology:true}).then(client => {
+    console.log("database in users connected");
+
+    const db = client.db('tinderdb');
+    const userCollection = db.collection(db);
+})
+
+
+
+
+
+
+
 // Get All Users
 router.get('/tinder/users', (req, res) => {
     db.collection('users').find().toArray().then(result => {
