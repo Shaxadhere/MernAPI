@@ -1,6 +1,29 @@
 const express = require('express')
 const router = express.Router()
-const Users = require('../models/users')
+const MongoClient = require('mongodb').MongoClient
+// const Users = require('../models/users')
+
+// Get All Users
+router.get('/tinder/users', (req, res) => {
+    db.collection('users').find().toArray().then(result => {
+        res.status(200).send(result)
+    })
+})
+
+// Create User
+router.post('/tinder/users', (req, res) => {
+    userCollection.insertOne(req.body).then(user => {
+        res.status(200).send(user)
+    })
+})
+
+// Delete User by Name
+router.delete('/tinder/users', (req, res) => {
+    console.log(req.body.id)
+    userCollection.findOneAndDelete({_id: req.body._id}).then(result => {
+        res.status(201).send(result);
+    }).catch(error => console.error(error))
+})
 
 
 router.get('/', async (req, res) => {
