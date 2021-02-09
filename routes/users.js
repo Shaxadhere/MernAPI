@@ -5,41 +5,52 @@ const MongoClient = require('mongodb').MongoClient
 
 const connectionString = "mongodb+srv://admin:dGakD2MeWQprWN02@cluster0.stgq9.mongodb.net/tinderdb?retryWrites=true&w=majority";
 
-MongoClient.connect(connectionString, {useUnifiedTopology:true}).then(client => {
-    console.log("database in users connected");
+// Database Name
+const dbName = 'tinderdb';
 
-    const db = client.db('tinderdb');
-    const userCollection = db.collection(db);
-    // Get All Users
-    router.get('/', (req, res) => {
-        db.collection('users').find().toArray().then(result => {
-            res.status(200).send(result)
-        })
-    })
-    
-    // Create User
-    router.post('/', (req, res) => {
-        userCollection.insertOne(req.body).then(user => {
-            res.status(200).send(user)
-        })
-    })
-    
-    // Delete User by Name
-    router.delete('/', (req, res) => {
-        console.log(req.body.id)
-        userCollection.findOneAndDelete({_id: req.body._id}).then(result => {
-            res.status(201).send(result);
-        }).catch(error => console.error(error))
+// Use connect method to connect to the server
+MongoClient.connect(url, function(err, client) {
+  assert.equal(null, err);
+  console.log("Connected successfully to server");
+
+  const db = client.db(dbName);
+
+  client.close();
+});
+
+
+
+// const client = MongoClient.connect(connectionString, {useUnifiedTopology: true}).then(client => {
+//     console.log("database in users connected");
+
+//     const db = client.db('tinderdb');
+//     const userCollection = db.collection(db);
+//     return client
+//     // Get All Users
+// })
+
+const userCollection = dbName.collection(db);
+router.get('/', (req, res) => {
+    db.collection('users').find().toArray().then(result => {
+        res.status(200).send(result)
     })
 })
+
+// Create User
+router.post('/', (req, res) => {
+    userCollection.insertOne(req.body).then(user => {
+        res.status(200).send(user)
+    })
+})
+
+// Delete User by Name
+router.delete('/', (req, res) => {
+    console.log(req.body.id)
+    userCollection.findOneAndDelete({_id: req.body._id}).then(result => {
+        res.status(201).send(result);
+    }).catch(error => console.error(error))
+})
 module.exports = router
-
-
-
-
-
-
-
 
 
 // router.get('/', async (req, res) => {
@@ -83,4 +94,3 @@ module.exports = router
 //     }
 
 // })
-
