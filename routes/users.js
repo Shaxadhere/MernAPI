@@ -10,35 +10,35 @@ MongoClient.connect(connectionString, {useUnifiedTopology:true}).then(client => 
 
     const db = client.db('tinderdb');
     const userCollection = db.collection(db);
-})
-
-
-
-
-
-
-
-// Get All Users
-router.get('/tinder/users', (req, res) => {
-    db.collection('users').find().toArray().then(result => {
-        res.status(200).send(result)
+    // Get All Users
+    router.get('/', (req, res) => {
+        db.collection('users').find().toArray().then(result => {
+            res.status(200).send(result)
+        })
+    })
+    
+    // Create User
+    router.post('/', (req, res) => {
+        userCollection.insertOne(req.body).then(user => {
+            res.status(200).send(user)
+        })
+    })
+    
+    // Delete User by Name
+    router.delete('/', (req, res) => {
+        console.log(req.body.id)
+        userCollection.findOneAndDelete({_id: req.body._id}).then(result => {
+            res.status(201).send(result);
+        }).catch(error => console.error(error))
     })
 })
 
-// Create User
-router.post('/tinder/users', (req, res) => {
-    userCollection.insertOne(req.body).then(user => {
-        res.status(200).send(user)
-    })
-})
 
-// Delete User by Name
-router.delete('/tinder/users', (req, res) => {
-    console.log(req.body.id)
-    userCollection.findOneAndDelete({_id: req.body._id}).then(result => {
-        res.status(201).send(result);
-    }).catch(error => console.error(error))
-})
+
+
+
+
+
 
 
 router.get('/', async (req, res) => {

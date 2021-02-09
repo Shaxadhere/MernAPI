@@ -10,9 +10,12 @@ app.use(express.json());
 
 const usersRouter = require('./routes/users')
 app.use('/tinder/users', usersRouter)
+
+
 app.get('/', (req, res) => {
     res.status(200).send("Hello World!!!!!!!!!!!!!!!!!!")
 })
+
 app.listen(8001, () => {
     console.log("Listening on port " + 8001)
 })
